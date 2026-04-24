@@ -59,3 +59,53 @@ exports.createExperience = (req, res) => {
         });
     });
  };
+
+ // Uppdatera post
+ exports.updateExperience = (req, res) => {
+    const id = req.params.id; 
+    const { companyname, jobtitle, location, startdate, enddate, description } = req.body; 
+
+    if (!companyname || !jobtitle || !location || !startdate || !enddate || !description) {
+        return res.status(400).json({ error: "Alla fät måste ifyllda." });
+    }
+
+    if (new Date(enddate) < new Date(startdate)) {
+        return res.status(400).json({ error: "Slutdatum kan inte vara tidigare än startdatum." });
+    }
+
+    const sql = `
+        UPDATE workexperience
+        SET companyname = = ?, jobtitle = ?, location = ?, startdate = ?, enddate = ?, description = ?
+        WHERE id = ?
+        `;
+    
+    db.query(sql, [companyname, jobtitle, location, startdate, enddate, description, id], (err, result) => {
+        if (err) {
+            return res.status(500).json({ error: "Fel vid uppdatering av post." });
+        }
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: "Ingen post hittades med detta id."});
+        }
+
+        res.json({ message: "Post uppdaterade." });
+    });
+ };
+
+ // Radera post 
+ exports.deleteExperience = (req, res) => {
+    const id = req.params.id; 
+    const sql = "DELETE FROM workexperience WHERE id = ?";
+
+    db.query(sql, [id], (err, result) => {
+        if (err) {
+            return res.status(500).json({ error: "Fel vid radering av post."});
+        }
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: "Ingen post hittades med detta id" });
+        }
+
+        res.json({ message: "Post raderad." }); 
+    });
+ };
