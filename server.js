@@ -5,7 +5,7 @@ require("dotenv").config();
 const workexperienceRoutes = require("./routes/workexperienceRoutes");
 
 const app = express();
-const PORT = process.env.PORT || 3306;
+const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
