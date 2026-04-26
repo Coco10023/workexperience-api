@@ -7,6 +7,12 @@ const workexperienceRoutes = require("./routes/workexperienceRoutes");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Loggar alla anrop
+app.use((req, res, next) => {
+    console.log("Request:", req.method, req.url);
+    next();
+});
+
 app.use(cors());
 app.use(express.json());
 

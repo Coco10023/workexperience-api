@@ -33,7 +33,7 @@ exports.getExperienceById = (req, res) => {
 
 // Skapa ny post
 exports.createExperience = (req, res) => {
-    const { companyname, jobtitle, location, startdate, enddate, description } = req.body;
+    const { companyname, jobtitle, location, startdate, enddate, description } = req.body || {};
 
     if (!companyname || !jobtitle || !location || !startdate || !enddate || !description) {
         return res.status(400).json({ error: "Alla fält måste vara ifyllda."});
@@ -50,7 +50,11 @@ exports.createExperience = (req, res) => {
 
     db.query(sql, [companyname, jobtitle, location, startdate, enddate, description], (err, result) => {
         if (err) {
-            return res.status(500).json({ error: "Fel vid skapande av post."});
+            console.error("SQL-fel vid INSERT:", err);
+            return res.status(500).json({
+                error: "Fel vid skapande av post.",
+                details: err.message
+            });
         }
 
         res.status(201).json({
@@ -63,7 +67,7 @@ exports.createExperience = (req, res) => {
  // Uppdatera post
  exports.updateExperience = (req, res) => {
     const id = req.params.id; 
-    const { companyname, jobtitle, location, startdate, enddate, description } = req.body; 
+    const { companyname, jobtitle, location, startdate, enddate, description } = req.body || {}; 
 
     if (!companyname || !jobtitle || !location || !startdate || !enddate || !description) {
         return res.status(400).json({ error: "Alla fät måste ifyllda." });
@@ -75,7 +79,7 @@ exports.createExperience = (req, res) => {
 
     const sql = `
         UPDATE workexperience
-        SET companyname = = ?, jobtitle = ?, location = ?, startdate = ?, enddate = ?, description = ?
+        SET companyname = ?, jobtitle = ?, location = ?, startdate = ?, enddate = ?, description = ?
         WHERE id = ?
         `;
     
