@@ -31,11 +31,12 @@ Fält:
 3. Skapa `.env`-fil med:
 
 ```env
-DB_HOST=localhost
-DB_USER=root
-DB_PASSWORD=
-DB_NAME=cv
-PORT=3000
+MYSQL_URL = mysql://root:TiHfloFTCVsxgWGoIuUEGAhivRpmuaxu@mysql.railway.internal:3306/railway
+MYSQLDATABASE = railway
+MYSQLHOST = mysql.railway.internal
+MYSQLPASSWORD = XXXXXXXXX
+MYSQLPORT = 3306
+MYSQLUSER = root
 ```
 
 ## Starta servern:
@@ -87,3 +88,6 @@ CORS aktiverat för cross-origin requests
 ## Testning
 
 API:et kan testas med exempelvis Thunder Client eller Postman.
+
+## Publicering 
+https://workexperience-api-9ekl.onrender.com/api/workexperience
