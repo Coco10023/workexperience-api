@@ -1,6 +1,6 @@
 const db = require("../db/connection");
 
-// Hämta alla poster
+// Hämta alla poster från databasen
 exports.getAllExperiences = (req, res) => {
     const sql = "SELECT * FROM workexperience ORDER BY id DESC";
 
@@ -38,6 +38,7 @@ exports.getExperienceById = (req, res) => {
 exports.createExperience = (req, res) => {
     const { companyname, jobtitle, location, startdate, enddate, description } = req.body || {};
 
+    // Validera att alla fält är ifyllda
     if (!companyname || !jobtitle || !location || !startdate || !enddate || !description) {
         return res.status(400).json({ error: "Alla fält måste vara ifyllda."});
     }
@@ -46,13 +47,14 @@ exports.createExperience = (req, res) => {
         return res.status(400).json({ error: "Slutdatum kan inte vara tidigare än startdatum."});
     }
 
+    // SQL-fråga för att lägga till ny post
     const sql = `
         INSERT INTO workexperience (companyname, jobtitle, location, startdate, enddate, description)
         VALUES (?, ?, ?, ?, ?, ?)
         `;
 
     db.query(sql, [companyname, jobtitle, location, startdate, enddate, description], (err, result) => {
-        if (err) {
+        if (err) { // Skicka fel om något går fel i databasen
             console.error("SQL-fel vid INSERT:", err);
             return res.status(500).json({
                 error: "Fel vid skapande av post.",
