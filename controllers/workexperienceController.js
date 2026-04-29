@@ -6,7 +6,10 @@ exports.getAllExperiences = (req, res) => {
 
     db.query(sql, (err, results) => {
         if (err) {
-            return res.status(500).json({ error: "Fel vid hämtning av poster." });
+            return res.status(500).json({ 
+                error: "Fel vid hämtning av poster.",
+                details: err.message
+             });
         }
 
         res.json(results);
